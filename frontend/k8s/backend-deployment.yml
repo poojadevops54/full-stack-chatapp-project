@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: backend-deployment
+  namespace: chat-app
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: chatapp-backend
+        image: poojagangasagar/chatapp-backend:latest
+        imagePullPolicy: Always
+
+        ports:
+        - containerPort: 5001
+
+        env:
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: chatapp-secrets
+              key: MONGO_URI
